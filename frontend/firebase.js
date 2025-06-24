@@ -1,17 +1,16 @@
-// firebase.js
-import { initializeApp } from "firebase/app";
-import { getAuth } from "firebase/auth";
+import { initializeApp, getApps } from "firebase/app";
+import { initializeAuth, getReactNativePersistence } from "firebase/auth";
+import AsyncStorage from "@react-native-async-storage/async-storage";
 
 const firebaseConfig = {
-    apiKey: "AIzaSyCJa7n8o9cgWqOzLsA3vBro7TtsRa7ROqg",
-    authDomain: "travelplanner-c327a.firebaseapp.com",
-    projectId: "travelplanner-c327a",
-    storageBucket: "travelplanner-c327a.firebasestorage.app",
-    messagingSenderId: "454777685795",
-    appId: "1:454777685795:web:a06f6b2e7abe3623e82e96"
+    // 你的 config
 };
 
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
+const app = !getApps().length ? initializeApp(firebaseConfig) : getApps()[0];
+
+const auth = initializeAuth(app, {
+    persistence: getReactNativePersistence(AsyncStorage)
+});
 
 export { auth };
+
