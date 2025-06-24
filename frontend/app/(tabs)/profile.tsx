@@ -1,72 +1,73 @@
-import { View, Text, Image, ScrollView, TouchableOpacity } from 'react-native';
-import React from 'react';
-import { images } from "@/constants/images";
+import React, { useEffect, useState } from "react";
+import { View, Text, StyleSheet, TouchableOpacity } from "react-native";
+import { onAuthStateChanged, signOut } from "firebase/auth";
+import { auth } from "../../firebase";
+import { useRouter } from "expo-router";
 
-const Profile = () => {
+export default function ProfileScreen() {
+    const [user, setUser] = useState(null);
+    const router = useRouter();
+
+    useEffect(() => {
+        const unsubscribe = onAuthStateChanged(auth, (user) => {
+            setUser(user);
+        });
+        return unsubscribe;
+    }, []);
+
+    const handleLogout = () => {
+        signOut(auth);
+    };
+
+
     return (
-        <View className="flex-1 bg-black"> {/* Main container for the screen */}
-            <Image
-                source={images.bg}
-                className="flex-1 absolute w-full z-0" // Make it cover the whole screen and stay static
-                resizeMode="cover"
-            />
-            <ScrollView className="flex-1"> {/* Scrollable content */}
-                <View className="items-center mt-20">
-                    <Image
-                        source={images.avatar}
-                        className="w-32 h-32 rounded-full border-2 border-white"
-                        resizeMode="cover"
-                    />
-                    <Text className="mt-4 text-white text-xl font-bold">Jon Moller</Text>
-                    <Text className="text-gray-400 text-base">Visual Designer</Text>
-                    <Text className="text-gray-400 text-sm">Stockholm, Sweden</Text>
-                    <TouchableOpacity className="mt-6 bg-pink-600 px-6 py-2 rounded-full">
-                        <Text className="text-white text-center">Upgrade Now - Go Pro</Text>
+        <View style={styles.container}>
+            {user ? (
+                <>
+                    <Text style={styles.title}>👋 歡迎 {user.email}</Text>
+                    <TouchableOpacity style={styles.logoutBtn} onPress={handleLogout}>
+                        <Text style={styles.btnText}>登出</Text>
                     </TouchableOpacity>
-                </View>
-                <View className="mt-10">
-                    <Text className="text-white text-lg font-semibold ml-5">Settings</Text>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.darkModeIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">Dark Mode</Text>
-                        <Text className="text-gray-400">On</Text>
+                </>
+            ) : (
+                <>
+                    <Text style={styles.title}>尚未登入</Text>
+                    <TouchableOpacity style={styles.loginBtn} onPress={() => router.push("/login")}>
+                        <Text style={styles.btnText}>登入</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.notificationIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">Notifications</Text>
-                        <Text className="text-gray-400">On</Text>
+                    <TouchableOpacity style={styles.signupBtn} onPress={() => router.push("/signup")}>
+                        <Text style={styles.btnText}>註冊</Text>
                     </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.privacyIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">Privacy</Text>
-                        <Text className="text-gray-400">></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.securityIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">Security</Text>
-                        <Text className="text-gray-400">></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.accountIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">Account</Text>
-                        <Text className="text-gray-400">></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.helpIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">Help</Text>
-                        <Text className="text-gray-400">></Text>
-                    </TouchableOpacity>
-                    <TouchableOpacity className="flex-row items-center p-4">
-                        <Image source={images.aboutIcon} className="w-6 h-6 mr-3" />
-                        <Text className="text-white flex-1">About</Text>
-                        <Text className="text-gray-400">></Text>
-                    </TouchableOpacity>
-                </View>
-                {/* Add some padding at the bottom to ensure all content is scrollable past the bottom edge of the screen */}
-                <View className="pb-20" />
-            </ScrollView>
+                </>
+            )}
         </View>
     );
-};
+}
 
-export default Profile;
+const styles = StyleSheet.create({
+    container: { flex: 1, justifyContent: "center", alignItems: "center" },
+    title: { fontSize: 22, marginBottom: 20, color: "#3b82f6" },
+    loginBtn: {
+        backgroundColor: "#3b82f6",
+        padding: 10,
+        marginBottom: 10,
+        borderRadius: 8,
+        width: 200,
+        alignItems: "center"
+    },
+    signupBtn: {
+        backgroundColor: "#6366f1",
+        padding: 10,
+        borderRadius: 8,
+        width: 200,
+        alignItems: "center"
+    },
+    logoutBtn: {
+        backgroundColor: "#ef4444",
+        padding: 10,
+        borderRadius: 8,
+        width: 200,
+        alignItems: "center"
+    },
+    btnText: { color: "#fff", fontWeight: "bold" }
+});
