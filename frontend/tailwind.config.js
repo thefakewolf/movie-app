@@ -9,6 +9,7 @@ module.exports = {
         secondary: "#151312",
         ratingBox: "#221F3D",
         searchBar: "#0F0D23",
+        "dark-200": "#1a1a2e",
         text: "#9CA4AB",
         darkAccent: "#AB8BFF",
         accentText: "#A8B5DB",

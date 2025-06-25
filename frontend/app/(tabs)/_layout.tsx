@@ -4,7 +4,7 @@ import {images} from "@/constants/images";
 import {icons} from "@/constants/icons";
 import {Image, ImageBackground, Text, View} from "react-native";
 
-const TabIcon = ({ focused, icon, title}:any) => {
+const TabIcon = ({ focused, icon, title}: any) => {
     if (focused) {
         return (
             <ImageBackground
@@ -18,7 +18,6 @@ const TabIcon = ({ focused, icon, title}:any) => {
     }
     return (
         <View className="size-full justify-center items-center mt-4 rounded-full">
-
             <Image source={icon} tintColor="#A8B5DB" className="size-5"/>
         </View>
     )
@@ -51,28 +50,27 @@ const _Layout = () => {
             <Tabs.Screen
                 name="index"
                 options={{
-                    title: "Home",
+                    title: "主頁",
                     headerShown: false,
                     tabBarIcon:({ focused })=> (
                         <TabIcon
                             focused={focused}
                             icon={icons.home}
-                            title="Home"
+                            title="主頁"
                         />
-
                     )
                 }}
             />
             <Tabs.Screen
                 name="search"
                 options={{
-                    title: "Search",
+                    title: "搜尋",
                     headerShown: false,
                     tabBarIcon:({ focused })=> (
                         <TabIcon
                             focused={focused}
                             icon={icons.search}
-                            title="Search"
+                            title="搜尋"
                         />
                     )
                 }}
@@ -80,13 +78,13 @@ const _Layout = () => {
             <Tabs.Screen
                 name="saved"
                 options={{
-                    title: "Saved",
+                    title: "收藏",
                     headerShown: false,
                     tabBarIcon:({ focused })=> (
                         <TabIcon
                             focused={focused}
                             icon={icons.save}
-                            title="Saved"
+                            title="收藏"
                         />
                     )
                 }}
@@ -94,13 +92,13 @@ const _Layout = () => {
             <Tabs.Screen
                 name="profile"
                 options={{
-                    title: "Profile",
+                    title: "個人資料",
                     headerShown: false,
                     tabBarIcon:({ focused })=> (
                         <TabIcon
                             focused={focused}
                             icon={icons.person}
-                            title="Profile"
+                            title="個人"
                         />
                     )
                 }}
